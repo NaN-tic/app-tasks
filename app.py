@@ -1,6 +1,6 @@
 #This file is part of tryton-task. The COPYRIGHT file at the top level of
 #this repository contains the full copyright notices and license terms.
-import ConfigParser
+from configparser import ConfigParser
 import logging
 import os
 import hgapi
@@ -26,7 +26,7 @@ class bcolors:
 
 def read_config_file():
     'Read config file'
-    Config = ConfigParser.ConfigParser()
+    Config = ConfigParser()
     Config.readfp(open('./local.cfg'))
     return Config
 
