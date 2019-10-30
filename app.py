@@ -31,7 +31,7 @@ def read_config_file():
     return Config
 
 @task
-def info():
+def info(ctx):
     'Info config modules'
     Config = read_config_file()
     modules = Config.sections()
@@ -82,7 +82,7 @@ def _hg_branches(module, path, config_branch=None):
 @task(help={
     'branch': 'Repo branch. Default is "default"',
     })
-def clone(branch=None):
+def clone(ctx, branch=None):
     '''Clone trytond modules'''
     Modules = read_config_file()
 
@@ -103,7 +103,7 @@ def clone(branch=None):
         hg_clone(url, repo_path, mod_branch)
 
 @task
-def update(module=None):
+def update(ctx, module=None):
     '''Update trytond modules'''
     Modules = read_config_file()
 
@@ -129,7 +129,7 @@ def update(module=None):
         hg_update(repo_path)
 
 @task
-def branches(module=None):
+def branches(ctx, module=None):
     '''Show info module branches'''
     Modules = read_config_file()
 
