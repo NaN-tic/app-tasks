@@ -1,7 +1,10 @@
 #This file is part of trytontasks_scm. The COPYRIGHT file at the top level of
 #this repository contains the full copyright notices and license terms.
 import hgapi
+import git
+import os
 import logging
+from invoke import run
 from blessings import Terminal
 
 t = Terminal()
@@ -52,3 +55,42 @@ def hg_update(path):
         return -1
 
     logger.info("Repo " + t.bold(path) + t.green(" Updated"))
+
+def git_clone(url, path, branch="master", revision="master"):
+    repo = git.Repo.clone_from(url, path, branch=branch)
+    print "Repo " + t.bold(path) + t.green(" Cloned")
+    return 0
+
+def git_pull(module, path, update=False, clean=False, branch=None,
+        revision=None, ignore_missing=False):
+    """
+    Params update, clean, branch and revision are not used.
+    """
+    path_repo = os.path.join(path, module)
+    if not os.path.exists(path_repo):
+        if ignore_missing:
+            return 0
+        print >> sys.stderr, t.red("Missing repositori:") + t.bold(path_repo)
+        return -1
+
+    cwd = os.getcwd()
+    os.chdir(path_repo)
+
+    cmd = ['git', 'pull']
+    result = run(' '.join(cmd), warn=True, hide='both')
+
+    if not result.ok:
+        print >> sys.stderr, t.red("= " + module + " = KO!")
+        print >> sys.stderr, result.stderr
+        os.chdir(cwd)
+        return -1
+
+    # If git outputs 'Already up-to-date' do not print anything.
+    if 'Already up-to-date' in result.stdout:
+        os.chdir(cwd)
+        return 0
+
+    print t.bold("= " + module + " =")
+    print result.stdout
+    os.chdir(cwd)
+    return 0
