@@ -3,6 +3,7 @@
 import hgapi
 import git
 import os
+import sys
 import logging
 from invoke import run
 from blessings import Terminal
