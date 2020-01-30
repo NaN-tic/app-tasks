@@ -1,3 +1,4 @@
 invoke
 blessings
 hgapi
+GitPython>=0.3.2

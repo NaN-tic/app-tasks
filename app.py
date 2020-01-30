@@ -6,7 +6,7 @@ import os
 import hgapi
 from invoke import Collection, task
 from blessings import Terminal
-from .scm import hg_clone, hg_update
+from .scm import hg_clone, hg_update, git_clone, git_pull
 
 
 t = Terminal()
@@ -100,7 +100,10 @@ def clone(ctx, branch=None):
             continue
 
         logger.info( "App " + t.bold(module) + " to clone")
-        hg_clone(url, repo_path, mod_branch)
+        if repo == 'hg':
+            hg_clone(url, repo_path, mod_branch)
+        else:
+            git_clone(url, repo_path, mod_branch)
 
 @task
 def update(ctx, module=None):
@@ -120,13 +123,17 @@ def update(ctx, module=None):
     for module in modules:
         repo = Modules.get(module, 'repo')
         path = Modules.get(module, 'path')
+        branch = Modules.get(module, 'branch')
 
         repo_path = os.path.join(path, module)
         if not os.path.exists(repo_path):
             continue
 
         logger.info( "APP " + t.bold(module) + " to update")
-        hg_update(repo_path)
+        if repo == 'hg':
+            hg_update(repo_path)
+        else:
+            git_pull(repo_path, '.', True, branch=branch)
 
 @task
 def branches(ctx, module=None):
@@ -147,7 +154,11 @@ def branches(ctx, module=None):
 
         repo_path = os.path.join(path, module)
 
-        _hg_branches(module, repo_path, branch)
+        if repo == 'hg':
+            _hg_branches(module, repo_path, branch)
+        else:
+            logger.info('Not available branches option with %s' % repo)
+            return
 
 # Add Invoke Collections
 AppCollection = Collection()
