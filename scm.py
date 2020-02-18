@@ -58,8 +58,8 @@ def hg_update(path):
     logger.info("Repo " + t.bold(path) + t.green(" Updated"))
 
 def git_clone(url, path, branch="master", revision="master"):
-    repo = git.Repo.clone_from(url, path, branch=branch)
-    print "Repo " + t.bold(path) + t.green(" Cloned")
+    git.Repo.clone_from(url, path, branch=branch)
+    print("Repo " + t.bold(path) + t.green(" Cloned"))
     return 0
 
 def git_pull(module, path, update=False, clean=False, branch=None,
@@ -71,7 +71,7 @@ def git_pull(module, path, update=False, clean=False, branch=None,
     if not os.path.exists(path_repo):
         if ignore_missing:
             return 0
-        print >> sys.stderr, t.red("Missing repositori:") + t.bold(path_repo)
+        print(sys.stderr, t.red("Missing repositori:") + t.bold(path_repo))
         return -1
 
     cwd = os.getcwd()
@@ -81,8 +81,8 @@ def git_pull(module, path, update=False, clean=False, branch=None,
     result = run(' '.join(cmd), warn=True, hide='both')
 
     if not result.ok:
-        print >> sys.stderr, t.red("= " + module + " = KO!")
-        print >> sys.stderr, result.stderr
+        print(sys.stderr, t.red("= " + module + " = KO!"))
+        print(sys.stderr, result.stderr)
         os.chdir(cwd)
         return -1
 
@@ -91,7 +91,7 @@ def git_pull(module, path, update=False, clean=False, branch=None,
         os.chdir(cwd)
         return 0
 
-    print t.bold("= " + module + " =")
-    print result.stdout
+    print(t.bold("= " + module + " ="))
+    print(result.stdout)
     os.chdir(cwd)
     return 0
