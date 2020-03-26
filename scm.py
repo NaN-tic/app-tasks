@@ -28,7 +28,7 @@ def hg_clone(url, path, branch="default", revision=None):
         client = hgapi.hg_clone(url, path, *extended_args)
         if revision:
             check_revision(client, path, revision, branch)
-    except hgapi.HgException as e:
+    except hgapi.HgException, e:
         logger.info(t.bold_red('[' + path + ']'))
         logger.info("Error running %s: %s" % (e.exit_code, str(e)))
         return -1
@@ -48,7 +48,7 @@ def hg_update(path):
         repo.hg_pull()
         revision = repo.hg_branch()
         repo.hg_update(revision)
-    except hgapi.HgException as e:
+    except hgapi.HgException, e:
         logger.info(t.bold_red('[' + path + ']'))
         logger.info("Error running %s: %s" % (e.exit_code, str(e)))
         return -1

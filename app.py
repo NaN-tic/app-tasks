@@ -1,6 +1,6 @@
 #This file is part of tryton-task. The COPYRIGHT file at the top level of
 #this repository contains the full copyright notices and license terms.
-from configparser import ConfigParser
+import ConfigParser
 import logging
 import os
 import hgapi
@@ -26,12 +26,12 @@ class bcolors:
 
 def read_config_file():
     'Read config file'
-    Config = ConfigParser()
+    Config = ConfigParser.ConfigParser()
     Config.readfp(open('./local.cfg'))
     return Config
 
 @task
-def info(ctx):
+def info():
     'Info config modules'
     Config = read_config_file()
     modules = Config.sections()
@@ -82,7 +82,7 @@ def _hg_branches(module, path, config_branch=None):
 @task(help={
     'branch': 'Repo branch. Default is "default"',
     })
-def clone(ctx, branch=None):
+def clone(branch=None):
     '''Clone trytond modules'''
     Modules = read_config_file()
 
@@ -106,7 +106,7 @@ def clone(ctx, branch=None):
             git_clone(url, repo_path, mod_branch)
 
 @task
-def update(ctx, module=None):
+def update(module=None):
     '''Update trytond modules'''
     Modules = read_config_file()
 
@@ -136,7 +136,7 @@ def update(ctx, module=None):
             git_pull(repo_path, '.', True, branch=branch)
 
 @task
-def branches(ctx, module=None):
+def branches(module=None):
     '''Show info module branches'''
     Modules = read_config_file()
 

@@ -1,4 +1,4 @@
-invoke
+invoke==0.12.2
 blessings
 hgapi
 GitPython>=0.3.2
